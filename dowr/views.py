@@ -1,12 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import django.contrib.auth as dj_auth
-
 
 # Create your views here.
 # user views
 from analysis import settings
-from dowr.models import SignupForm, LoginForm
+from dowr.models import SignupForm, LoginForm, Category
 from django.contrib.auth.models import User
 
 
@@ -27,6 +26,7 @@ def signup(request):
         f = SignupForm()
     return render(request, 'registration/signup.html', {'form': f})
 
+
 def game(request):
     if request.method == "POST":
         name11 = request.POST["name11"]
@@ -36,14 +36,16 @@ def game(request):
         time = request.POST["time"]
         count = request.POST["count"]
         hardness = request.POST["hardness"]
-        if name11 and name12 and name21 and name22:
+        category = get_object_or_404(Category, pk=request.POST["category"])
 
+        if name11 and name12 and name21 and name22:
             context = {
                 "name11": name11,
                 "name12": name12,
                 "name21": name21,
                 "name22": name22,
                 "time": time,
+                "category": category,
 
             }
             return render(request, 'dowr/game.html', context=context)
@@ -70,14 +72,23 @@ def login_(request):
     return render(request, 'registration/login.html', {'form': f})
     # return HttpResponse("bibi")
 
+
 # ======================
 
 def logout_(request):
     return render(request, 'dowr/not_yet_a_user_homepage.html')
+
+
 def index(request):
     return HttpResponse("hello")
+
 
 def homepage(request):
     if not request.user.is_authenticated:
         return render(request, 'dowr/not_yet_a_user_homepage.html')
-    return render(request, 'dowr/user_homepage.html')
+    c = Category(name="ادبیات")
+    c.save()
+    categories = Category.objects.all()
+    return render(request, 'dowr/user_homepage.html', {
+        'categories': categories,
+    })

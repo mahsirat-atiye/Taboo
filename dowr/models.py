@@ -4,7 +4,6 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-
 # Create your models here.
 HARDNESS_LEVEL_CHOICES = (
     ("1", "آسان"),
@@ -13,8 +12,12 @@ HARDNESS_LEVEL_CHOICES = (
 )
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=200)
+
+
 class Word(models.Model):
-    category = models.CharField(max_length=200)
+    categoris = models.ManyToManyField(Category)
     hardness_level = models.CharField(max_length=1, choices=HARDNESS_LEVEL_CHOICES)
 
 
