@@ -51,6 +51,7 @@
     </p>
     <h1>user authenticate</h1>
     <form action="{% url 'dowr:game' %}" method="post" id="usrform">
+
         {% csrf_token %}
         <h3>نام بازیکنان</h3>
         <div class="input-group">
@@ -76,21 +77,16 @@
 
 
         {% if categories %}
-            {% for category in categories %}
-                <div class="radio">
-                    <input type="radio" name="category" id="category_{{ category.id }}" value="{{ category.id }}">
-                   <label for="category_{{ category.id }}"> {{ category.name }}</label>
-                </div>
-
+            {% for choice in categories %}
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="choice{{ forloop.counter }}">{{ choice.name }}</label><br>
             {% endfor %}
-
-
 
         {% else %}
             <p>هیچ کتگوری وجود ندارد.</p>
         {% endif %}
 
-       <div class="input-group-btn">
+        <div class="input-group-btn">
 
             <button type="submit" class="btn btn-outline-warning">شروع بازی</button>
         </div>

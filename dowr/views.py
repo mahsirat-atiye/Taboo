@@ -36,7 +36,7 @@ def game(request):
         time = request.POST["time"]
         count = request.POST["count"]
         hardness = request.POST["hardness"]
-        category = get_object_or_404(Category, pk=request.POST["category"])
+        category = get_object_or_404(Category, pk=request.POST["choice"])
 
         if name11 and name12 and name21 and name22:
             context = {
