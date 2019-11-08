@@ -87,6 +87,7 @@
     var Running_1 = false;
 
     var word_counter = 0 ;
+    document.getElementById("word_place").innerHTML = list_of_words[word_counter];
 
     var UpdateTimer = function() {
         // Run till timeout
@@ -134,21 +135,21 @@
     };
 
     var Pause = function() {
+        word_counter++;
         Running = false;
         Running_1= true;
         GuiPause.hide();
         GuiResume.show();
         document.getElementById("word_place").innerHTML = list_of_words[word_counter];
-        word_counter++;
     };
 
     var Resume = function() {
+        word_counter++;
         Running = true;
         Running_1 = false;
         GuiPause.show();
         GuiResume.hide();
         document.getElementById("word_place").innerHTML = list_of_words[word_counter];
-        word_counter++;
     };
 
     var Start = function( Timeout ) {
