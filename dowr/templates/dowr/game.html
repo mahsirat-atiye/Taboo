@@ -47,26 +47,46 @@
         <h3 style="color: red">نفر دوم تیم دوم:{{ name22 }}</h3>
 
 <div id="countdown">00:00</div>
-<div id="pause">Pause</div>
-<div id="resume">Resume</div>
+<div id="pause" class="button">تیم اول </div>
+        <div id="word_place"></div>
+<div id="resume">تیم دوم </div>
+        <div id="countdown_1">00:00</div>
+
     </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+{#    <script src="Timer.js"></script>#}
 <script>
-    var CountDown = (function ($) {
+
+  var CountDown = (function ($) {
+
+      var list_of_words = [ "پاک کن " ,  " جسب برف", "تخته "];
+      var num_of_dowrs = 2;
+      var time_of_dowrs = (new Date()).setTime(120000);
+      var category_name = "ادبیات";
+      var time_limit = (new Date()).getTime();
     // Length ms
     var TimeOut = 10000;
     // Interval ms
     var TimeGap = 1000;
-
-    var CurrentTime = ( new Date() ).getTime();
+        var CurrentTime = ( new Date() ).getTime();
+    var CurrentTime_1 = (new Date()).getTime();
+    //var CurrentTime_1 = (new Date()).getTime();
     var EndTime = ( new Date() ).getTime() + TimeOut;
-
+    //first Team Timer
     var GuiTimer = $('#countdown');
     var GuiPause = $('#pause');
     var GuiResume = $('#resume').hide();
-
+    //second team Timer
+    var GuiTimer_1 = $('#countdown_1');
+    var GuiPause_1 = $('#pause_1');
+    var GuiResume_1 = $('#resume_1').hide();
+    //Running status (first team timer)
     var Running = true;
+    //Running status (second teadm timer)
+    var Running_1 = false;
+
+    var word_counter = 0 ;
 
     var UpdateTimer = function() {
         // Run till timeout
@@ -80,28 +100,55 @@
                 GuiTimer.css('color','red');
             }
         }
+        if (Running_1){
+             CurrentTime_1 += TimeGap;
+            if( CurrentTime_1 >= EndTime ) {
+                GuiTimer_1.css('color','red');
+            }
+        }
         // Update Gui
-        var Time = new Date();
-        Time.setTime( EndTime - CurrentTime );
+              var Time = new Date();
+         Time.setTime( EndTime - CurrentTime );
         var Minutes = Time.getMinutes()-30;
         var Seconds = Time.getSeconds();
 
-        GuiTimer.html(
+        var Time1 = new Date();
+        Time1.setTime(EndTime - CurrentTime_1);
+        var Minutes1 = Time1.getMinutes()-30;
+        var Seconds1 = Time1.getSeconds();
+
+        if (Running){
+            GuiTimer.html(
             (Minutes < 10 ? '0' : '') + Minutes
             + ':'
             + (Seconds < 10 ? '0' : '') + Seconds );
+
+        }
+        if (Running_1){
+             GuiTimer_1.html(
+            (Minutes1 < 10 ? '0' : '') + Minutes1
+            + ':'
+            + (Seconds1 < 10 ? '0' : '') + Seconds1);
+        }
+
     };
 
     var Pause = function() {
         Running = false;
+        Running_1= true;
         GuiPause.hide();
         GuiResume.show();
+        document.getElementById("word_place").innerHTML = list_of_words[word_counter];
+        word_counter++;
     };
 
     var Resume = function() {
         Running = true;
+        Running_1 = false;
         GuiPause.show();
         GuiResume.hide();
+        document.getElementById("word_place").innerHTML = list_of_words[word_counter];
+        word_counter++;
     };
 
     var Start = function( Timeout ) {
@@ -111,18 +158,23 @@
         UpdateTimer();
     };
 
+
+
+
     return {
         Pause: Pause,
         Resume: Resume,
-        Start: Start
+        Start: Start,
     };
 })(jQuery);
+    jQuery('#pause').on('click',CountDown.Pause);
+    jQuery('#resume').on('click',CountDown.Resume);
 
-jQuery('#pause').on('click',CountDown.Pause);
-jQuery('#resume').on('click',CountDown.Resume);
 
 // ms
-CountDown.Start({{ time }});
+CountDown.Start(120000);
+
+
 </script>
         </body>
 {% endblock %}
