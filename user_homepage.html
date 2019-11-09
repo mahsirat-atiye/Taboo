@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %} بازی دور {% endblock %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <style>
+            h3 {
+                color: #2a6496;
+
+            }
+
+            img {
+                border-radius: 50%;
+            }
+
+            p {
+                color: darkred;
+            }
+        </style>
+    </head>
+    <body>
+    <h3>
+        دور با ما!
+    </h3>
+    <h4>
+        دور چیه؟
+    </h4>
+    <p>
+دور یه بازیه دورهمی و باحاله که چهار نفره انجام می شه.
+        با انجام این بازی هم با دوستات کلی دورهم رقابت می کنید و خوش می گذرونید هم درسای حفظیتونو با هم مرور می کنید.
+    </p>
+    <h4>چطوری بازی کنیم؟</h4>
+    <p>
+یک) دو تا تیم می شید و هم تیمی ها روبروی هم می شینند.<br />
+        دو) وقتی شروع می کنید یه کلمه روی صفحه ظاهر می شه که باید اونو توی کمترین زمانی که می تونی به هم تیمیت برسونی.<br />
+        سه) وقتی یارت کلمه رو گفت(توی موضوع املا باید کلمه با حروف درست گفته بشه) روی تیمت کلیک می کنی تا نوبت تیم بعدی بشه.<br />
+        چهار) تیمی که در پایان بازی زمان بیشتری داشته باشه برنده بازی می شه.
+    </p>
+    <h4>چه کار نکنیم؟</h4>
+    <p>
+یک) اوّل از همه نباید اجزای اصلی کلمه، ترجمه یا کلمات هم قافیه رو بگی.<br />
+        دو)دوم هم نباید کلمه رو با حرکات دست و بدن بازی کنی.<br />
+        اگر تیمی کارهای ممنوع رو انجام داد تیم مقابل می تونه یه کلمه رو به دلخواه خودش بدون حدس زدن رد کنه و امتیاز او کلمه رو بگیره.
+    </p>
+    <p>
+        برای اینکه بیشتر بدونید و بازی کنید ثبت نام کنید و وارد بشید.
+    </p>
+    <h1>user authenticate</h1>
+    <form action="{% url 'dowr:game' %}" method="post" id="usrform">
+
+        {% csrf_token %}
+        <h3>نام بازیکنان</h3>
+        <div class="input-group">
+
+            <input type="text" name="name11" class="form-control"
+                   placeholder=" بازیکن اول تیم اول">
+            <input type="text" name="name12" class="form-control"
+                   placeholder=" بازیکن دوم تیم اول">
+            <input type="text" name="name21" class="form-control"
+                   placeholder=" بازیکن اول تیم دوم">
+            <input type="text" name="name22" class="form-control"
+                   placeholder=" بازیکن دوم تیم دوم">
+
+        </div>
+        <h3>پارامترهای بازی</h3>
+        <input type="number" name="time" class="form-control"
+               placeholder=" زمان هر دور">
+        <input type="number" name="count" class="form-control"
+               placeholder="تعداد دورها">
+        <input type="number" name="hardness" class="form-control"
+               placeholder=" سطح سختی بازی">
+
+
+
+        {% if categories %}
+            {% for choice in categories %}
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="choice{{ forloop.counter }}">{{ choice.name }}</label><br>
+            {% endfor %}
+
+        {% else %}
+            <p>هیچ کتگوری وجود ندارد.</p>
+        {% endif %}
+
+        <div class="input-group-btn">
+
+            <button type="submit" class="btn btn-outline-warning">شروع بازی</button>
+        </div>
+
+    </form>
+    </body>
+{% endblock %}
