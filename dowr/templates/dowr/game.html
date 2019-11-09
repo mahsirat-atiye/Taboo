@@ -64,11 +64,15 @@
 
     var Team_A = (new  Date()).getTime();
     var Team_B = (new Date()).getTime();
+    var list_of_words = [ "پاک کن " ,  " جسب برف", "تخته "];
     var Dowr  = 0 ;
+    var word_counter = 0 ;
+    var TeamA_say = false;
+    var TeamB_say = false;
 
   var CountDown = (function ($) {
 
-      var list_of_words = [ "پاک کن " ,  " جسب برف", "تخته "];
+
       var category_name = "ادبیات";
       var EndGame = false;
     // Length ms
@@ -95,7 +99,7 @@
     //Running status (dowr time)
       var Running_2 = true;
 
-    var word_counter = 0 ;
+
 
     var UpdateTimer = function() {
         // Run till timeout
@@ -156,6 +160,8 @@
 
     var Pause = function() {
         if (!EndGame){
+            TeamA_say = true;
+            TeamB_say = false;
         word_counter++;
         Running = false;
         Running_1= true;
@@ -169,6 +175,8 @@
 
     var Resume = function() {
         if (!EndGame){
+            TeamA_say = false;
+            TeamB_say = true;
         word_counter++;
         Running = true;
         Running_1 = false;
@@ -245,6 +253,7 @@ CountDown.Start(7*60*1000);
                 if (num_of_dowrs>0){
                     Start(TimeOut);
                     win(Team_A , Team_B , num_of_dowrs);
+                    Change();
                 }
                 if (num_of_dowrs ===0) CountDown.Stop(true);
             }
@@ -270,6 +279,16 @@ CountDown.Start(7*60*1000);
         CurrentTime = ( new Date() ).getTime();
         EndTime = ( new Date() ).getTime() + TimeOut;
         UpdateTimer();
+    };
+
+    var Change = function () {
+        if (num_of_dowrs !== 0){
+        if (TeamB_say || TeamA_say) {
+        word_counter ++;
+        document.getElementById("word_place").innerHTML = list_of_words[word_counter];
+        }
+        }
+
     };
 
 
