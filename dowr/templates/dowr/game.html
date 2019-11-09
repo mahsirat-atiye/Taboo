@@ -53,6 +53,7 @@
 <div id="resume">تیم دوم </div>
         <div id="countdown_1">00:00</div>
         <div id="winner"></div>
+        <div id="Dowrnumber"></div>
 
 
     </div>
@@ -63,7 +64,8 @@
 
     var Team_A = (new  Date()).getTime();
     var Team_B = (new Date()).getTime();
-    var Dowr = (new Date()).getTime();
+    var Dowr  = 0 ;
+   // document.getElementById("Dowrnumber").innerHTML = Dowr;
 
   var CountDown = (function ($) {
 
@@ -72,6 +74,7 @@
       var time_of_dowrs = (new Date()).setTime(120000);
       var category_name = "ادبیات";
       var time_limit = (new Date()).getTime();
+      var EndGame = false;
     // Length ms
     var TimeOut = 10000;
     // Interval ms
@@ -97,7 +100,7 @@
       var Running_2 = true;
 
     var word_counter = 0 ;
-    document.getElementById("word_place").innerHTML = list_of_words[word_counter];
+  //  document.getElementById("word_place").innerHTML = list_of_words[word_counter];
 
     var UpdateTimer = function() {
         // Run till timeout
@@ -105,7 +108,9 @@
             setTimeout( UpdateTimer, TimeGap );
         }
         // Countdown if running
-        if( Running ) {
+
+        if (!EndGame){
+            if( Running ) {
             CurrentTime += TimeGap;
             Team_A = CurrentTime;
             if( CurrentTime >= EndTime ) {
@@ -122,12 +127,6 @@
             }
         }
 
-        if (Running_2){
-            Current_Time_2 +=TimeGap;
-            if (Current_Time_2 >=EndTime){
-                GuiTimer_2.css('color','red')
-            }
-        }
         // Update Gui
               var Time = new Date();
          Time.setTime( EndTime - CurrentTime );
@@ -156,9 +155,12 @@
         }
 
 
+        }
+
     };
 
     var Pause = function() {
+        if (!EndGame){
         word_counter++;
         Running = false;
         Running_1= true;
@@ -166,9 +168,12 @@
         GuiResume.show();
         document.getElementById("word_place").innerHTML = list_of_words[word_counter];
         win(Team_A , Team_B , Dowr);
+        }
+
     };
 
     var Resume = function() {
+        if (!EndGame){
         word_counter++;
         Running = true;
         Running_1 = false;
@@ -176,6 +181,10 @@
         GuiResume.hide();
         document.getElementById("word_place").innerHTML = list_of_words[word_counter];
         win(Team_A , Team_B , Dowr);
+
+        }
+
+
     };
 
     var Start = function( Timeout ) {
@@ -185,11 +194,22 @@
         UpdateTimer();
     };
 
+    var Stop = function (shouldStop) {
+        EndGame = shouldStop;
+        if (shouldStop){
+        Running = false;
+        Running_1 = false;
+        win(Team_A , Team_B , Dowr);
+        }
+
+    };
+
 
     return {
         Pause: Pause,
         Resume: Resume,
         Start: Start,
+        Stop : Stop,
     };
 })(jQuery);
     jQuery('#pause').on('click',CountDown.Pause);
@@ -202,7 +222,7 @@ CountDown.Start(7*60*1000);
 //DOWR TIMER
          var CountDown_dowr = (function ($) {
 
-      var num_of_dowrs = 2;
+      var num_of_dowrs = 3;
       var time_limit = (new Date()).getTime();
     // Length ms
     var TimeOut = 10000;
@@ -225,15 +245,13 @@ CountDown.Start(7*60*1000);
 
         if (Running_2){
             CurrentTime +=TimeGap;
-            Dowr = CurrentTime;
             if (CurrentTime >=EndTime){
                  num_of_dowrs--;
                 if (num_of_dowrs>0){
                     Start(TimeOut);
+                    win(Team_A , Team_B , num_of_dowrs);
                 }
-                if (num_of_dowrs ===0){
-                    win(Team_A , Team_B , Dowr);
-                }
+                if (num_of_dowrs ===0) CountDown.Stop(true);
             }
         }
         // Update Gui
@@ -269,12 +287,12 @@ CountDown.Start(7*60*1000);
 
 
 // ms
-CountDown_dowr.Start(120000);
+CountDown_dowr.Start(10000);
 
-function win(A , B  , Dowr) {
+function win(A , B ) {
     if (A <B)  document.getElementById("winner").innerHTML = "تیم اول ";
     else  document.getElementById("winner").innerHTML = "تیم دوم ";
-    
+
 }
 
 </script>
