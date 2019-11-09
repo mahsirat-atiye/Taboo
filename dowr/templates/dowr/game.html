@@ -46,16 +46,18 @@
         <h3 style="color: red">نفر اول تیم دوم:{{ name21 }}</h3>
         <h3 style="color: red">نفر دوم تیم دوم:{{ name22 }}</h3>
 
+<div id="dowr_time">00:00</div>
 <div id="countdown">00:00</div>
 <div id="pause" class="button">تیم اول </div>
         <div id="word_place"></div>
 <div id="resume">تیم دوم </div>
         <div id="countdown_1">00:00</div>
 
+
     </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-{#    <script src="Timer.js"></script>#}
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>#}
+
 <script>
 
   var CountDown = (function ($) {
@@ -69,8 +71,9 @@
     var TimeOut = 10000;
     // Interval ms
     var TimeGap = 1000;
-        var CurrentTime = ( new Date() ).getTime();
+    var CurrentTime = ( new Date() ).getTime();
     var CurrentTime_1 = (new Date()).getTime();
+    var Current_Time_2 = (new Date()).getTime();
     //var CurrentTime_1 = (new Date()).getTime();
     var EndTime = ( new Date() ).getTime() + TimeOut;
     //first Team Timer
@@ -79,12 +82,14 @@
     var GuiResume = $('#resume').hide();
     //second team Timer
     var GuiTimer_1 = $('#countdown_1');
-    var GuiPause_1 = $('#pause_1');
-    var GuiResume_1 = $('#resume_1').hide();
+    // Dowr Timer
+      var GuiTimer_2 = $('#dowr_time');
     //Running status (first team timer)
     var Running = true;
     //Running status (second teadm timer)
     var Running_1 = false;
+    //Running status (dowr time)
+      var Running_2 = true;
 
     var word_counter = 0 ;
     document.getElementById("word_place").innerHTML = list_of_words[word_counter];
@@ -107,6 +112,13 @@
                 GuiTimer_1.css('color','red');
             }
         }
+
+        if (Running_2){
+            Current_Time_2 +=TimeGap;
+            if (Current_Time_2 >=EndTime){
+                GuiTimer_2.css('color','red')
+            }
+        }
         // Update Gui
               var Time = new Date();
          Time.setTime( EndTime - CurrentTime );
@@ -118,11 +130,13 @@
         var Minutes1 = Time1.getMinutes()-30;
         var Seconds1 = Time1.getSeconds();
 
+
+
         if (Running){
             GuiTimer.html(
             (Minutes < 10 ? '0' : '') + Minutes
             + ':'
-            + (Seconds < 10 ? '0' : '') + Seconds );
+            + (Seconds < 10 ? '0' : '') + Seconds);
 
         }
         if (Running_1){
@@ -131,6 +145,7 @@
             + ':'
             + (Seconds1 < 10 ? '0' : '') + Seconds1);
         }
+
 
     };
 
@@ -160,8 +175,6 @@
     };
 
 
-
-
     return {
         Pause: Pause,
         Resume: Resume,
@@ -172,9 +185,76 @@
     jQuery('#resume').on('click',CountDown.Resume);
 
 
-// ms
-CountDown.Start(120000);
 
+// ms
+CountDown.Start(7*60*1000);
+//DOWR TIMER
+         var CountDown_dowr = (function ($) {
+
+      var num_of_dowrs = 2;
+      var time_limit = (new Date()).getTime();
+    // Length ms
+    var TimeOut = 10000;
+    // Interval ms
+    var TimeGap = 1000;
+    var CurrentTime = ( new Date() ).getTime();
+    //var CurrentTime_1 = (new Date()).getTime();
+    var EndTime = ( new Date() ).getTime() + TimeOut;
+      var GuiTimer_2 = $('#dowr_time');
+    //Running status (dowr time)
+      var Running_2 = true;
+
+
+    var UpdateTimer = function() {
+        // Run till timeout
+        if( CurrentTime + TimeGap < EndTime ) {
+            setTimeout( UpdateTimer, TimeGap );
+        }
+        // Countdown if running
+
+        if (Running_2){
+            CurrentTime +=TimeGap;
+            if (CurrentTime >=EndTime){
+                 num_of_dowrs--;
+                if (num_of_dowrs>0){
+                    Start(TimeOut);
+                }
+            }
+        }
+        // Update Gui
+              var Time = new Date();
+         Time.setTime( EndTime - CurrentTime );
+        var Minutes = Time.getMinutes()-30;
+        var Seconds = Time.getSeconds();
+
+
+             GuiTimer_2.html(
+            (Minutes < 10 ? '0' : '') + Minutes
+            + ':'
+            + (Seconds < 10 ? '0' : '') + Seconds);
+
+
+    };
+
+
+    var Start = function( Timeout ) {
+        TimeOut = Timeout;
+        CurrentTime = ( new Date() ).getTime();
+        EndTime = ( new Date() ).getTime() + TimeOut;
+        UpdateTimer();
+    };
+
+
+    return {
+
+        Start: Start
+    };
+})(jQuery);
+
+
+
+// ms
+CountDown_dowr.Start(5000);
 
 </script>
         </body>
