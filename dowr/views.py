@@ -86,8 +86,7 @@ def index(request):
 def homepage(request):
     if not request.user.is_authenticated:
         return render(request, 'dowr/not_yet_a_user_homepage.html')
-    c = Category(name="ادبیات")
-    c.save()
+
     categories = Category.objects.all()
     return render(request, 'dowr/user_homepage.html', {
         'categories': categories,
