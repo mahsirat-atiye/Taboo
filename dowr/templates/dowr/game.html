@@ -65,15 +65,11 @@
     var Team_A = (new  Date()).getTime();
     var Team_B = (new Date()).getTime();
     var Dowr  = 0 ;
-   // document.getElementById("Dowrnumber").innerHTML = Dowr;
 
   var CountDown = (function ($) {
 
       var list_of_words = [ "پاک کن " ,  " جسب برف", "تخته "];
-      var num_of_dowrs = 2;
-      var time_of_dowrs = (new Date()).setTime(120000);
       var category_name = "ادبیات";
-      var time_limit = (new Date()).getTime();
       var EndGame = false;
     // Length ms
     var TimeOut = 10000;
@@ -100,7 +96,6 @@
       var Running_2 = true;
 
     var word_counter = 0 ;
-  //  document.getElementById("word_place").innerHTML = list_of_words[word_counter];
 
     var UpdateTimer = function() {
         // Run till timeout
@@ -114,7 +109,7 @@
             CurrentTime += TimeGap;
             Team_A = CurrentTime;
             if( CurrentTime >= EndTime ) {
-                win(Team_A , Team_B , Dowr);
+                win(Team_A , Team_B);
                 GuiTimer.css('color','red');
             }
         }
@@ -122,7 +117,7 @@
              CurrentTime_1 += TimeGap;
              Team_B = CurrentTime_1;
             if( CurrentTime_1 >= EndTime ) {
-                win(Team_A , Team_B , Dowr);
+                win(Team_A , Team_B);
                 GuiTimer_1.css('color','red');
             }
         }
@@ -167,7 +162,7 @@
         GuiPause.hide();
         GuiResume.show();
         document.getElementById("word_place").innerHTML = list_of_words[word_counter];
-        win(Team_A , Team_B , Dowr);
+        win(Team_A , Team_B);
         }
 
     };
@@ -180,7 +175,7 @@
         GuiPause.show();
         GuiResume.hide();
         document.getElementById("word_place").innerHTML = list_of_words[word_counter];
-        win(Team_A , Team_B , Dowr);
+        win(Team_A , Team_B);
 
         }
 
@@ -199,7 +194,7 @@
         if (shouldStop){
         Running = false;
         Running_1 = false;
-        win(Team_A , Team_B , Dowr);
+        win(Team_A , Team_B);
         }
 
     };
