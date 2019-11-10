@@ -66,26 +66,23 @@
 
         var Team_A = (new Date()).getTime();
         var Team_B = (new Date()).getTime();
-        {#var list_of_words = ["پاک کن ", " جسب برف", "تخته "];#}
         var list_of_words = {{ list_of_word|safe }};
-        var Dowr = 0;
         var word_counter = 0;
         var TeamA_say = false;
         var TeamB_say = false;
 
         var CountDown = (function ($) {
 
-
-            var category_name = "ادبیات";
             var EndGame = false;
             // Length ms
             var TimeOut = 10000;
             // Interval ms
             var TimeGap = 1000;
+            //first Team time
             var CurrentTime = (new Date()).getTime();
+            //second team time
             var CurrentTime_1 = (new Date()).getTime();
-            var Current_Time_2 = (new Date()).getTime();
-            //var CurrentTime_1 = (new Date()).getTime();
+            //final time
             var EndTime = (new Date()).getTime() + TimeOut;
             //first Team Timer
             var GuiTimer = $('#countdown');
@@ -222,12 +219,14 @@
 
 
         // ms
-        CountDown.Start({{ team_time_limit }} * 60 * 1000);
+        CountDown.Start({{ team_time_limit }} * 60 * 1000
+
+        )
+        ;
         //DOWR TIMER
         var CountDown_dowr = (function ($) {
 
             var num_of_dowrs = {{ num_of_dowrs }};
-            var time_limit = (new Date()).getTime();
             // Length ms
             var TimeOut = 10000;
             // Interval ms
@@ -235,6 +234,7 @@
             var CurrentTime = (new Date()).getTime();
             //var CurrentTime_1 = (new Date()).getTime();
             var EndTime = (new Date()).getTime() + TimeOut;
+            //Dowr Time
             var GuiTimer_2 = $('#dowr_time');
             //Running status (dowr time)
             var Running_2 = true;
@@ -301,12 +301,13 @@
 
 
         // ms
-        CountDown_dowr.Start({{ dowr_time }}*60*1000);
+        CountDown_dowr.Start({{ dowr_time }} * 60 * 1000
+        )
+        ;
 
         function win(A, B) {
             if (A < B) document.getElementById("winner").innerHTML = "تیم اول ";
             else document.getElementById("winner").innerHTML = "تیم دوم ";
-
         }
 
     </script>
