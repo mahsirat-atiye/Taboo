@@ -67,14 +67,10 @@
         <h3 style="color: red">نفر اول تیم دوم:{{ name21 }}</h3>
         <h3 style="color: red">نفر دوم تیم دوم:{{ name22 }}</h3>
 
-{#        <div id="dowr_time">00:00</div>#}
-        <div id="countdown">00:00</div>
-        <div id="pause" class="button">تیم اول</div>
+        <div id="pause" class="button">گفتم</div>
         <div id="word_place"></div>
-        <div id="resume">تیم دوم</div>
-        <div id="countdown_1">00:00</div>
+        <div id="resume">گفتم</div>
         <div id="winner"></div>
-        <div id="Dowrnumber"></div>
 
 
     </div>
@@ -90,6 +86,7 @@
         var word_counter = 0;
         var TeamA_say = false;
         var TeamB_say = false;
+        var timesEnd = false;
 
         var CountDown = (function ($) {
 
@@ -131,6 +128,7 @@
                         Team_A = CurrentTime;
                         if (CurrentTime >= EndTime) {
                             win(Team_A, Team_B);
+                            timesEnd = true;
                         }
                     }
                     if (Running_1) {
@@ -138,6 +136,7 @@
                         Team_B = CurrentTime_1;
                         if (CurrentTime_1 >= EndTime) {
                             win(Team_A, Team_B);
+                            timesEnd = true;
                         }
 
                     }
@@ -282,6 +281,8 @@
                         if (num_of_dowrs === 0) CountDown.Stop(true);
                     }
                 }
+
+                Stop(timesEnd);
                 // Update Gui
                 var Time = new Date();
                 Time.setTime(EndTime - CurrentTime);
@@ -319,6 +320,10 @@
                     }
                 }
 
+            };
+
+            var Stop = function (timeEnd) {
+                if (timesEnd) Running_2 = false;
             };
 
 
