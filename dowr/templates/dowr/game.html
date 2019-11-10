@@ -37,7 +37,8 @@
         <style>
             body {
                 background-color: #FFC300;
-                }
+            }
+
             .big_circle {
                 width: 250px;
                 height: 250px;
@@ -55,7 +56,7 @@
             #parent {
                 position: relative;
                 width: 100%;
-                height:600px;
+                height: 600px;
 
             }
 
@@ -90,7 +91,7 @@
             }
 
             .border {
-                border-width: 5px  !important;
+                border-width: 5px !important;
             }
         </style>
     </head>
@@ -100,47 +101,50 @@
 
     <div class="container">
         <div class="progress" style="height: 30px; margin-top: 10px;">
-                <div class="progress-bar progress-bar-striped" style="width:80%; height: 30px;" id="team1"></div>
-            </div>
+            <div class="progress-bar progress-bar-striped" style="width:80%; height: 30px;" id="team1"></div>
+        </div>
 
-            <div class="progress" style="height: 30px; margin-top: 10px;">
-                <div class="progress-bar progress-bar-striped bg-danger" style="width:100%; height: 30px;" id="team2"></div>
-            </div>
         <div class="progress" style="height: 30px; margin-top: 10px;">
-                <div class="progress-bar progress-bar-striped bg-success" style="width:20%; height: 30px;" id="dowr_time"></div>
-            </div>
+            <div class="progress-bar progress-bar-striped bg-danger" style="width:100%; height: 30px;" id="team2"></div>
+        </div>
+        <div class="progress" style="height: 30px; margin-top: 10px;">
+            <div class="progress-bar progress-bar-striped bg-success" style="width:20%; height: 30px;"
+                 id="dowr_time"></div>
+        </div>
 
         <div id="parent">
-                <div class="small_circle rounded-circle" id="div1">
-                    {{ name11 }}
+            <div class="small_circle rounded-circle" id="div1">
+                <h3 style="color: black;margin: 2px auto;font-weight: bold" id="11">{{ name11 }}</h3>
+            </div>
+            <div class="small_circle rounded-circle" id="div2">
+                <h3 style="color: black;margin: 30px auto;font-weight: bold" id="21">{{ name21 }}</h3>
+            </div>
+            <div class="big_circle rounded-circle border border-primary">
+                <div id="pause" class="button"
+                     style="margin-top: 30px;background-color: #edffe1;border-radius: 25px;width: 20%;margin-right: 95px;font-weight: bold">
+                    گفتم
                 </div>
-                <div class="small_circle rounded-circle" id="div2">{{ name12 }}</div>
-                <div class="big_circle rounded-circle border border-primary">
-                    <div id="pause" class="button">گفتم</div>
-        <div id="word_place"></div>
-        <div id="resume">گفتم</div>
-        <div id="winner"></div>
+                <div id="word_place" style="margin-top: 30px;font-weight: bold"></div>
+                <div id="resume"
+                     style="font-weight: bold;margin-top: 30px;background-color: #edffe1;border-radius: 25px;width: 20%;margin-right: 95px;font-weight: bold"
+                     class="bottom">گفتم
                 </div>
-                <div class="small_circle rounded-circle" id="div3">{{ name21 }}</div>
-                <div class="row" style="padding-top: 75px; padding-left: 520px;">
-                    <div style="clear:both;margin-right: 530px" class="small_circle rounded-circle" id="div4" >
-                         <h3 style="margin: 30px auto; color: black;">{{ name22 }}</h3>
-                    </div>
+                <div id="winner" style="margin-top: 40px;font-weight: bold"></div>
+            </div>
+            <div class="small_circle rounded-circle" id="div3">
+                <h3 style=" color: black;margin : 30px auto ;font-weight: bold" id="22">{{ name22 }}</h3>
+            </div>
+            <div class="row" style="padding-top: 75px; padding-left: 520px;">
+                <div style="clear:both;margin-right: 530px" class="small_circle rounded-circle" id="div4">
+                    <h3 style="margin: 30px auto; color: black;font-weight: bold" id="12">{{ name12 }}</h3>
                 </div>
             </div>
+        </div>
         <br><br>
         <p>بازی</p>
         <h1>
             {{ category.name }}
         </h1>
-
-
-        <h3 style="color: black">نفر اول تیم اول:{{ name11 }}</h3>
-        <h3 style="color: black">نفر دوم تیم اول:{{ name12 }}</h3>
-        <h3 style="color: black">نفر اول تیم دوم:{{ name21 }}</h3>
-
-
-
 
 
     </div>
@@ -182,7 +186,9 @@
             var pbar1 = $('#team1');
             //Progressbar team2
             var pbar2 = $('#team2');
-            var timeLimit ={{ team_time_limit }} *60;
+            var timeLimit =
+            {{ team_time_limit }} *
+            60;
             document.getElementById("word_place").innerHTML = list_of_words[word_counter];
 
             var UpdateTimer = function () {
@@ -210,7 +216,7 @@
                         }
 
                     }
-                    win(Team_A , Team_B);
+                    win(Team_A, Team_B);
 
                     // Update Gui
                     var Time = new Date();
@@ -225,8 +231,8 @@
 
 
                     if (Running) {
-                        var teamOne = Minutes*60 + Seconds;
-                        var remaining1 = teamOne *100/ timeLimit;
+                        var teamOne = Minutes * 60 + Seconds;
+                        var remaining1 = teamOne * 100 / timeLimit;
                         document.getElementById("team1").style.width = remaining1 + "%";
                         pbar1.html((Minutes < 10 ? '0' : '') + Minutes
                             + ':'
@@ -234,8 +240,8 @@
 
                     }
                     if (Running_1) {
-                        var teamTwo = Minutes1*60 + Seconds1;
-                        var remaining2 = teamTwo *100/timeLimit;
+                        var teamTwo = Minutes1 * 60 + Seconds1;
+                        var remaining2 = teamTwo * 100 / timeLimit;
                         document.getElementById("team2").style.width = remaining2 + "%";
                         pbar2.html((Minutes1 < 10 ? '0' : '') + Minutes1
                             + ':'
@@ -252,6 +258,10 @@
                 if (!EndGame) {
                     TeamA_say = true;
                     TeamB_say = false;
+                    $('#11').hide();
+                    $('#12').hide();
+                    $('#21').show();
+                    $('#22').show();
                     word_counter++;
                     Running = false;
                     Running_1 = true;
@@ -267,6 +277,11 @@
                 if (!EndGame) {
                     TeamA_say = false;
                     TeamB_say = true;
+                    $('#11').show();
+                    $('#12').show();
+                    $('#21').hide();
+                    $('#22').hide();
+
                     word_counter++;
                     Running = true;
                     Running_1 = false;
@@ -316,7 +331,9 @@
         ;
         //DOWR TIMER
         var CountDown_dowr = (function ($) {
-            var dowrLimit ={{ dowr_time }}*60;
+            var dowrLimit =
+            {{ dowr_time }}*
+            60;
 
             var num_of_dowrs = {{ num_of_dowrs }};
             // Length ms
@@ -365,11 +382,9 @@
                     + ':'
                     + (Seconds < 10 ? '0' : '') + Seconds);
 
-                var dowr = Minutes*60+Seconds;
-                var remainingDowr = dowr *100/dowrLimit;
-                document.getElementById("dowr_time").style.width = remainingDowr +"%";
-
-
+                var dowr = Minutes * 60 + Seconds;
+                var remainingDowr = dowr * 100 / dowrLimit;
+                document.getElementById("dowr_time").style.width = remainingDowr + "%";
 
 
             };
