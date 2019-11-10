@@ -323,7 +323,10 @@
             };
 
             var Stop = function (timeEnd) {
-                if (timesEnd) Running_2 = false;
+                if (timesEnd) {
+                    Running_2 = false;
+                    CountDown.Stop(true);
+                }
             };
 
 
