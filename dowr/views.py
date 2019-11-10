@@ -29,14 +29,17 @@ def signup(request):
 
 def game(request):
     if request.method == "POST":
-        name11 = request.POST["name11"]
-        name12 = request.POST["name12"]
-        name21 = request.POST["name21"]
-        name22 = request.POST["name22"]
-        dowr_time = request.POST["time"]
-        # time of each dowr
-        num_of_dowrs = request.POST["count"]
-        hardness = request.POST["hardness"]
+        try:
+            name11 = request.POST["name11"]
+            name12 = request.POST["name12"]
+            name21 = request.POST["name21"]
+            name22 = request.POST["name22"]
+            dowr_time = request.POST["time"]
+            # time of each dowr
+            num_of_dowrs = request.POST["count"]
+            hardness = request.POST["hardness"]
+        except:
+            return HttpResponseRedirect(settings.REDIRECT_URL)
         category = get_object_or_404(Category, pk=request.POST["choice"])
         list_of_words=category.word_set.filter(hardness_level=hardness)
         team_time_limit = int(dowr_time)*int(num_of_dowrs)*0.7
