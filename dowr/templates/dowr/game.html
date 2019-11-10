@@ -41,16 +41,17 @@
         <h1>
             {{ category.name }}
         </h1>
+
         <h3 style="color: blue">نفر اول تیم اول:{{ name11 }}</h3>
         <h3 style="color: blue">نفر دوم تیم اول:{{ name12 }}</h3>
         <h3 style="color: red">نفر اول تیم دوم:{{ name21 }}</h3>
         <h3 style="color: red">نفر دوم تیم دوم:{{ name22 }}</h3>
 
-<div id="dowr_time">00:00</div>
-<div id="countdown">00:00</div>
-<div id="pause" class="button">تیم اول </div>
+        <div id="dowr_time">00:00</div>
+        <div id="countdown">00:00</div>
+        <div id="pause" class="button">تیم اول</div>
         <div id="word_place"></div>
-<div id="resume">تیم دوم </div>
+        <div id="resume">تیم دوم</div>
         <div id="countdown_1">00:00</div>
         <div id="winner"></div>
         <div id="Dowrnumber"></div>
@@ -58,257 +59,256 @@
 
     </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-<script>
-
-    var Team_A = (new  Date()).getTime();
-    var Team_B = (new Date()).getTime();
-    var list_of_words = [ "پاک کن " ,  " جسب برف", "تخته "];
-    var Dowr  = 0 ;
-    var word_counter = 0 ;
-    var TeamA_say = false;
-    var TeamB_say = false;
-
-  var CountDown = (function ($) {
+    <script>
 
 
-      var category_name = "ادبیات";
-      var EndGame = false;
-    // Length ms
-    var TimeOut = 10000;
-    // Interval ms
-    var TimeGap = 1000;
-    var CurrentTime = ( new Date() ).getTime();
-    var CurrentTime_1 = (new Date()).getTime();
-    var Current_Time_2 = (new Date()).getTime();
-    //var CurrentTime_1 = (new Date()).getTime();
-    var EndTime = ( new Date() ).getTime() + TimeOut;
-    //first Team Timer
-    var GuiTimer = $('#countdown');
-    var GuiPause = $('#pause');
-    var GuiResume = $('#resume').hide();
-    //second team Timer
-    var GuiTimer_1 = $('#countdown_1');
-    // Dowr Timer
-      var GuiTimer_2 = $('#dowr_time');
-    //Running status (first team timer)
-    var Running = true;
-    //Running status (second teadm timer)
-    var Running_1 = false;
-    //Running status (dowr time)
-      var Running_2 = true;
+        var Team_A = (new Date()).getTime();
+        var Team_B = (new Date()).getTime();
+        {#var list_of_words = ["پاک کن ", " جسب برف", "تخته "];#}
+        var list_of_words = {{ list_of_word|safe }};
+        var Dowr = 0;
+        var word_counter = 0;
+        var TeamA_say = false;
+        var TeamB_say = false;
 
-    document.getElementById("word_place").innerHTML = list_of_words[word_counter];
-
-    var UpdateTimer = function() {
-        // Run till timeout
-        if( CurrentTime + TimeGap < EndTime ) {
-            setTimeout( UpdateTimer, TimeGap );
-        }
-        // Countdown if running
-
-        if (!EndGame){
-            if( Running ) {
-            CurrentTime += TimeGap;
-            Team_A = CurrentTime;
-            if( CurrentTime >= EndTime ) {
-                win(Team_A , Team_B);
-                GuiTimer.css('color','red');
-            }
-        }
-        if (Running_1){
-             CurrentTime_1 += TimeGap;
-             Team_B = CurrentTime_1;
-            if( CurrentTime_1 >= EndTime ) {
-                win(Team_A , Team_B);
-                GuiTimer_1.css('color','red');
-            }
-        }
-
-        // Update Gui
-              var Time = new Date();
-         Time.setTime( EndTime - CurrentTime );
-        var Minutes = Time.getMinutes()-30;
-        var Seconds = Time.getSeconds();
-
-        var Time1 = new Date();
-        Time1.setTime(EndTime - CurrentTime_1);
-        var Minutes1 = Time1.getMinutes()-30;
-        var Seconds1 = Time1.getSeconds();
+        var CountDown = (function ($) {
 
 
+            var category_name = "ادبیات";
+            var EndGame = false;
+            // Length ms
+            var TimeOut = 10000;
+            // Interval ms
+            var TimeGap = 1000;
+            var CurrentTime = (new Date()).getTime();
+            var CurrentTime_1 = (new Date()).getTime();
+            var Current_Time_2 = (new Date()).getTime();
+            //var CurrentTime_1 = (new Date()).getTime();
+            var EndTime = (new Date()).getTime() + TimeOut;
+            //first Team Timer
+            var GuiTimer = $('#countdown');
+            var GuiPause = $('#pause');
+            var GuiResume = $('#resume').hide();
+            //second team Timer
+            var GuiTimer_1 = $('#countdown_1');
+            // Dowr Timer
+            var GuiTimer_2 = $('#dowr_time');
+            //Running status (first team timer)
+            var Running = true;
+            //Running status (second teadm timer)
+            var Running_1 = false;
+            //Running status (dowr time)
+            var Running_2 = true;
 
-        if (Running){
-            GuiTimer.html(
-            (Minutes < 10 ? '0' : '') + Minutes
-            + ':'
-            + (Seconds < 10 ? '0' : '') + Seconds);
+            document.getElementById("word_place").innerHTML = list_of_words[word_counter];
 
-        }
-        if (Running_1){
-             GuiTimer_1.html(
-            (Minutes1 < 10 ? '0' : '') + Minutes1
-            + ':'
-            + (Seconds1 < 10 ? '0' : '') + Seconds1);
-        }
-
-
-        }
-
-    };
-
-    var Pause = function() {
-        if (!EndGame){
-            TeamA_say = true;
-            TeamB_say = false;
-        word_counter++;
-        Running = false;
-        Running_1= true;
-        GuiPause.hide();
-        GuiResume.show();
-        document.getElementById("word_place").innerHTML = list_of_words[word_counter];
-        win(Team_A , Team_B);
-        }
-
-    };
-
-    var Resume = function() {
-        if (!EndGame){
-            TeamA_say = false;
-            TeamB_say = true;
-        word_counter++;
-        Running = true;
-        Running_1 = false;
-        GuiPause.show();
-        GuiResume.hide();
-        document.getElementById("word_place").innerHTML = list_of_words[word_counter];
-        win(Team_A , Team_B);
-
-        }
-
-
-    };
-
-    var Start = function( Timeout ) {
-        TimeOut = Timeout;
-        CurrentTime = ( new Date() ).getTime();
-        EndTime = ( new Date() ).getTime() + TimeOut;
-        UpdateTimer();
-    };
-
-    var Stop = function (shouldStop) {
-        EndGame = shouldStop;
-        if (shouldStop){
-        Running = false;
-        Running_1 = false;
-        win(Team_A , Team_B);
-        }
-
-    };
-
-
-    return {
-        Pause: Pause,
-        Resume: Resume,
-        Start: Start,
-        Stop : Stop,
-    };
-})(jQuery);
-    jQuery('#pause').on('click',CountDown.Pause);
-    jQuery('#resume').on('click',CountDown.Resume);
-
-
-
-// ms
-CountDown.Start(7*60*1000);
-//DOWR TIMER
-         var CountDown_dowr = (function ($) {
-
-      var num_of_dowrs = 3;
-      var time_limit = (new Date()).getTime();
-    // Length ms
-    var TimeOut = 10000;
-    // Interval ms
-    var TimeGap = 1000;
-    var CurrentTime = ( new Date() ).getTime();
-    //var CurrentTime_1 = (new Date()).getTime();
-    var EndTime = ( new Date() ).getTime() + TimeOut;
-      var GuiTimer_2 = $('#dowr_time');
-    //Running status (dowr time)
-      var Running_2 = true;
-
-
-    var UpdateTimer = function() {
-        // Run till timeout
-        if( CurrentTime + TimeGap < EndTime ) {
-            setTimeout( UpdateTimer, TimeGap );
-        }
-        // Countdown if running
-
-        if (Running_2){
-            CurrentTime +=TimeGap;
-            if (CurrentTime >=EndTime){
-                 num_of_dowrs--;
-                if (num_of_dowrs>0){
-                    Start(TimeOut);
-                    win(Team_A , Team_B , num_of_dowrs);
-                    Change();
+            var UpdateTimer = function () {
+                // Run till timeout
+                if (CurrentTime + TimeGap < EndTime) {
+                    setTimeout(UpdateTimer, TimeGap);
                 }
-                if (num_of_dowrs ===0) CountDown.Stop(true);
-            }
+                // Countdown if running
+
+                if (!EndGame) {
+                    if (Running) {
+                        CurrentTime += TimeGap;
+                        Team_A = CurrentTime;
+                        if (CurrentTime >= EndTime) {
+                            win(Team_A, Team_B);
+                            GuiTimer.css('color', 'red');
+                        }
+                    }
+                    if (Running_1) {
+                        CurrentTime_1 += TimeGap;
+                        Team_B = CurrentTime_1;
+                        if (CurrentTime_1 >= EndTime) {
+                            win(Team_A, Team_B);
+                            GuiTimer_1.css('color', 'red');
+                        }
+                    }
+
+                    // Update Gui
+                    var Time = new Date();
+                    Time.setTime(EndTime - CurrentTime);
+                    var Minutes = Time.getMinutes() - 30;
+                    var Seconds = Time.getSeconds();
+
+                    var Time1 = new Date();
+                    Time1.setTime(EndTime - CurrentTime_1);
+                    var Minutes1 = Time1.getMinutes() - 30;
+                    var Seconds1 = Time1.getSeconds();
+
+
+                    if (Running) {
+                        GuiTimer.html(
+                            (Minutes < 10 ? '0' : '') + Minutes
+                            + ':'
+                            + (Seconds < 10 ? '0' : '') + Seconds);
+
+                    }
+                    if (Running_1) {
+                        GuiTimer_1.html(
+                            (Minutes1 < 10 ? '0' : '') + Minutes1
+                            + ':'
+                            + (Seconds1 < 10 ? '0' : '') + Seconds1);
+                    }
+
+
+                }
+
+            };
+
+            var Pause = function () {
+                if (!EndGame) {
+                    TeamA_say = true;
+                    TeamB_say = false;
+                    word_counter++;
+                    Running = false;
+                    Running_1 = true;
+                    GuiPause.hide();
+                    GuiResume.show();
+                    document.getElementById("word_place").innerHTML = list_of_words[word_counter];
+                    win(Team_A, Team_B);
+                }
+
+            };
+
+            var Resume = function () {
+                if (!EndGame) {
+                    TeamA_say = false;
+                    TeamB_say = true;
+                    word_counter++;
+                    Running = true;
+                    Running_1 = false;
+                    GuiPause.show();
+                    GuiResume.hide();
+                    document.getElementById("word_place").innerHTML = list_of_words[word_counter];
+                    win(Team_A, Team_B);
+
+                }
+
+
+            };
+
+            var Start = function (Timeout) {
+                TimeOut = Timeout;
+                CurrentTime = (new Date()).getTime();
+                EndTime = (new Date()).getTime() + TimeOut;
+                UpdateTimer();
+            };
+
+            var Stop = function (shouldStop) {
+                EndGame = shouldStop;
+                if (shouldStop) {
+                    Running = false;
+                    Running_1 = false;
+                    win(Team_A, Team_B);
+                }
+
+            };
+
+
+            return {
+                Pause: Pause,
+                Resume: Resume,
+                Start: Start,
+                Stop: Stop,
+            };
+        })(jQuery);
+        jQuery('#pause').on('click', CountDown.Pause);
+        jQuery('#resume').on('click', CountDown.Resume);
+
+
+        // ms
+        CountDown.Start({{ team_time_limit }} * 60 * 1000);
+        //DOWR TIMER
+        var CountDown_dowr = (function ($) {
+
+            var num_of_dowrs = {{ num_of_dowrs }};
+            var time_limit = (new Date()).getTime();
+            // Length ms
+            var TimeOut = 10000;
+            // Interval ms
+            var TimeGap = 1000;
+            var CurrentTime = (new Date()).getTime();
+            //var CurrentTime_1 = (new Date()).getTime();
+            var EndTime = (new Date()).getTime() + TimeOut;
+            var GuiTimer_2 = $('#dowr_time');
+            //Running status (dowr time)
+            var Running_2 = true;
+
+
+            var UpdateTimer = function () {
+                // Run till timeout
+                if (CurrentTime + TimeGap < EndTime) {
+                    setTimeout(UpdateTimer, TimeGap);
+                }
+                // Countdown if running
+
+                if (Running_2) {
+                    CurrentTime += TimeGap;
+                    if (CurrentTime >= EndTime) {
+                        num_of_dowrs--;
+                        if (num_of_dowrs > 0) {
+                            Start(TimeOut);
+                            win(Team_A, Team_B, num_of_dowrs);
+                            Change();
+                        }
+                        if (num_of_dowrs === 0) CountDown.Stop(true);
+                    }
+                }
+                // Update Gui
+                var Time = new Date();
+                Time.setTime(EndTime - CurrentTime);
+                var Minutes = Time.getMinutes() - 30;
+                var Seconds = Time.getSeconds();
+
+
+                GuiTimer_2.html(
+                    (Minutes < 10 ? '0' : '') + Minutes
+                    + ':'
+                    + (Seconds < 10 ? '0' : '') + Seconds);
+
+
+            };
+
+
+            var Start = function (Timeout) {
+                TimeOut = Timeout;
+                CurrentTime = (new Date()).getTime();
+                EndTime = (new Date()).getTime() + TimeOut;
+                UpdateTimer();
+            };
+
+            var Change = function () {
+                if (num_of_dowrs !== 0) {
+                    if (TeamB_say || TeamA_say) {
+                        word_counter++;
+                        document.getElementById("word_place").innerHTML = list_of_words[word_counter];
+                    }
+                }
+
+            };
+
+
+            return {
+
+                Start: Start
+            };
+        })(jQuery);
+
+
+        // ms
+        CountDown_dowr.Start({{ dowr_time }}*60*1000);
+
+        function win(A, B) {
+            if (A < B) document.getElementById("winner").innerHTML = "تیم اول ";
+            else document.getElementById("winner").innerHTML = "تیم دوم ";
+
         }
-        // Update Gui
-              var Time = new Date();
-         Time.setTime( EndTime - CurrentTime );
-        var Minutes = Time.getMinutes()-30;
-        var Seconds = Time.getSeconds();
 
-
-             GuiTimer_2.html(
-            (Minutes < 10 ? '0' : '') + Minutes
-            + ':'
-            + (Seconds < 10 ? '0' : '') + Seconds);
-
-
-    };
-
-
-    var Start = function( Timeout ) {
-        TimeOut = Timeout;
-        CurrentTime = ( new Date() ).getTime();
-        EndTime = ( new Date() ).getTime() + TimeOut;
-        UpdateTimer();
-    };
-
-    var Change = function () {
-        if (num_of_dowrs !== 0){
-        if (TeamB_say || TeamA_say) {
-        word_counter ++;
-        document.getElementById("word_place").innerHTML = list_of_words[word_counter];
-        }
-        }
-
-    };
-
-
-    return {
-
-        Start: Start
-    };
-})(jQuery);
-
-
-
-// ms
-CountDown_dowr.Start(10000);
-
-function win(A , B ) {
-    if (A <B)  document.getElementById("winner").innerHTML = "تیم اول ";
-    else  document.getElementById("winner").innerHTML = "تیم دوم ";
-
-}
-
-</script>
-        </body>
+    </script>
+    </body>
 {% endblock %}

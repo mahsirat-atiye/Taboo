@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 import django.contrib.auth as dj_auth
-
+import json
 # Create your views here.
 # user views
 from analysis import settings
@@ -33,10 +33,16 @@ def game(request):
         name12 = request.POST["name12"]
         name21 = request.POST["name21"]
         name22 = request.POST["name22"]
-        time = request.POST["time"]
-        count = request.POST["count"]
+        dowr_time = request.POST["time"]
+        # time of each dowr
+        num_of_dowrs = request.POST["count"]
         hardness = request.POST["hardness"]
         category = get_object_or_404(Category, pk=request.POST["choice"])
+        list_of_words=category.word_set.filter(hardness_level=hardness)
+        team_time_limit = int(dowr_time)*int(num_of_dowrs)*0.7
+        list_of_word = []
+        for word in list_of_words:
+            list_of_word.append(word.name)
 
         if name11 and name12 and name21 and name22:
             context = {
@@ -44,8 +50,11 @@ def game(request):
                 "name12": name12,
                 "name21": name21,
                 "name22": name22,
-                "time": time,
                 "category": category,
+                "dowr_time": dowr_time,
+                "num_of_dowrs": num_of_dowrs,
+                "list_of_word":list_of_word,
+                "team_time_limit": team_time_limit
 
             }
             return render(request, 'dowr/game.html', context=context)
