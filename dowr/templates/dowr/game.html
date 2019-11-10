@@ -33,21 +33,41 @@
                 padding-left: 0.8rem;
             }
         </style>
+
+        <style>
+            body {
+                background-color: #FFC300;
+            }
+        </style>
     </head>
+
     <body>
+
+
     <div class="container">
+        <div class="progress" style="height: 30px; margin-top: 10px;">
+                <div class="progress-bar progress-bar-striped" style="width:80%; height: 30px;" id="team1"></div>
+            </div>
+
+            <div class="progress" style="height: 30px; margin-top: 10px;">
+                <div class="progress-bar progress-bar-striped bg-danger" style="width:100%; height: 30px;" id="team2"></div>
+            </div>
+        <div class="progress" style="height: 30px; margin-top: 10px;">
+                <div class="progress-bar progress-bar-striped bg-success" style="width:20%; height: 30px;" id="dowr_time"></div>
+            </div>
         <br><br>
         <p>بازی</p>
         <h1>
             {{ category.name }}
         </h1>
 
+
         <h3 style="color: blue">نفر اول تیم اول:{{ name11 }}</h3>
         <h3 style="color: blue">نفر دوم تیم اول:{{ name12 }}</h3>
         <h3 style="color: red">نفر اول تیم دوم:{{ name21 }}</h3>
         <h3 style="color: red">نفر دوم تیم دوم:{{ name22 }}</h3>
 
-        <div id="dowr_time">00:00</div>
+{#        <div id="dowr_time">00:00</div>#}
         <div id="countdown">00:00</div>
         <div id="pause" class="button">تیم اول</div>
         <div id="word_place"></div>
@@ -84,21 +104,18 @@
             var CurrentTime_1 = (new Date()).getTime();
             //final time
             var EndTime = (new Date()).getTime() + TimeOut;
-            //first Team Timer
-            var GuiTimer = $('#countdown');
             var GuiPause = $('#pause');
             var GuiResume = $('#resume').hide();
-            //second team Timer
-            var GuiTimer_1 = $('#countdown_1');
             // Dowr Timer
-            var GuiTimer_2 = $('#dowr_time');
             //Running status (first team timer)
             var Running = true;
             //Running status (second teadm timer)
             var Running_1 = false;
-            //Running status (dowr time)
-            var Running_2 = true;
-
+            //Progressbar team 1
+            var pbar1 = $('#team1');
+            //Progressbar team2
+            var pbar2 = $('#team2');
+            var timeLimit ={{ team_time_limit }} *60;
             document.getElementById("word_place").innerHTML = list_of_words[word_counter];
 
             var UpdateTimer = function () {
@@ -114,7 +131,6 @@
                         Team_A = CurrentTime;
                         if (CurrentTime >= EndTime) {
                             win(Team_A, Team_B);
-                            GuiTimer.css('color', 'red');
                         }
                     }
                     if (Running_1) {
@@ -122,9 +138,10 @@
                         Team_B = CurrentTime_1;
                         if (CurrentTime_1 >= EndTime) {
                             win(Team_A, Team_B);
-                            GuiTimer_1.css('color', 'red');
                         }
+
                     }
+                    win(Team_A , Team_B);
 
                     // Update Gui
                     var Time = new Date();
@@ -139,17 +156,22 @@
 
 
                     if (Running) {
-                        GuiTimer.html(
-                            (Minutes < 10 ? '0' : '') + Minutes
+                        var teamOne = Minutes*60 + Seconds;
+                        var remaining1 = teamOne *100/ timeLimit;
+                        document.getElementById("team1").style.width = remaining1 + "%";
+                        pbar1.html((Minutes < 10 ? '0' : '') + Minutes
                             + ':'
                             + (Seconds < 10 ? '0' : '') + Seconds);
 
                     }
                     if (Running_1) {
-                        GuiTimer_1.html(
-                            (Minutes1 < 10 ? '0' : '') + Minutes1
+                        var teamTwo = Minutes1*60 + Seconds1;
+                        var remaining2 = teamTwo *100/timeLimit;
+                        document.getElementById("team2").style.width = remaining2 + "%";
+                        pbar2.html((Minutes1 < 10 ? '0' : '') + Minutes1
                             + ':'
                             + (Seconds1 < 10 ? '0' : '') + Seconds1);
+
                     }
 
 
@@ -225,6 +247,7 @@
         ;
         //DOWR TIMER
         var CountDown_dowr = (function ($) {
+            var dowrLimit ={{ dowr_time }}*60;
 
             var num_of_dowrs = {{ num_of_dowrs }};
             // Length ms
@@ -270,6 +293,12 @@
                     (Minutes < 10 ? '0' : '') + Minutes
                     + ':'
                     + (Seconds < 10 ? '0' : '') + Seconds);
+
+                var dowr = Minutes*60+Seconds;
+                var remainingDowr = dowr *100/dowrLimit;
+                document.getElementById("dowr_time").style.width = remainingDowr +"%";
+
+
 
 
             };
